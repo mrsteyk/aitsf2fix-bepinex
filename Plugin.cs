@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 using BepInEx;
 using BepInEx.Configuration;
@@ -39,6 +40,18 @@ public class Plugin : BasePlugin
         UIFix = Config.Bind("Resolution", "UIFix", true);
 
         Harmony.PatchAll(typeof(Plugin));
+
+        // ok you can clown upon me...
+        // foreach(var e in BustShots.consts) {
+        //     FolderManager.Folder folder;
+        //     if (FolderManager.data.folder.TryGetValue(e.Key, out folder)) {
+        //         folder.files.Add(e.Value);
+        //     } else {
+        //         folder = new FolderManager.Folder();
+        //         folder.files.Add(e.Value);
+        //         FolderManager.data.folder.Add(e.Key, folder);
+        //     }
+        // }
     }
 
     [HarmonyPatch(typeof(Game.CameraController), nameof(Game.CameraController.OnEnable))]
@@ -63,6 +76,47 @@ public class Plugin : BasePlugin
                 Screen.SetResolution(DesiredResolutionX.Value, DesiredResolutionY.Value, FullScreenMode.Windowed);
                 logger.LogInfo("Override to windowed");
             }
+        }
+    }
+
+    // [HarmonyPatch(typeof(Develop.DevelopManager), "get_UserName")]
+    // public static string get_UserName() {
+    //     logger.LogInfo(System.Environment.StackTrace);
+    //     return "gonzo";
+    // }
+
+    [HarmonyPatch(typeof(FolderManager), nameof(FolderManager.GetFiles))]
+    [HarmonyPostfix]
+    public static void GetFiles(string path, ref Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStringArray __result) {
+        // logger.LogInfo(path);
+        var arr = BustShots.consts.Where(c => c.Key == path).ToArray();
+        if (arr.Length > 0) {
+            __result = arr.Select(c => c.Value).ToArray();
+        } else if (path.StartsWith("Assets/Asset/graphics/3d/chara/motion/mot_")) {
+            // logger.LogError(path);
+            /*
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c06_03/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c52_01/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c20_01/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c30_02/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c30_02/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c20_03/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c75_01/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c20_06/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c24_03/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+[Error  : aitsf2fix] Assets/Asset/graphics/3d/chara/motion/mot_c00_00/face
+            */
         }
     }
 }
