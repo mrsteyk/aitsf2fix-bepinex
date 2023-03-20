@@ -1,10 +1,12 @@
 # AI: THE SOMNIUM FILES - nirvanA Initiative Fix (port to BepInEx6 BE)
 
-This is a WIP BepInEx6 BE version of [AI: THE SOMNIUM FILES - nirvanA Initiative Fix](https://github.com/Lyall/AISomniumFiles2Fix)
+This is a WIP BepInEx6 BE version of [AI: THE SOMNIUM FILES - nirvanA Initiative Fix](https://github.com/Lyall/AISomniumFiles2Fix), with debug menu fixes maybe potentially.
+
+Only fix done is `BustShot` tree view.
 
 ## Configuration
 
-```
+```ini
 ## Settings file was created by plugin aitsf2fix v1.0.0
 ## Plugin GUID: aitsf2fix
 
