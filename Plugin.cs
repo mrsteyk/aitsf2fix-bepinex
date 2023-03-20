@@ -23,11 +23,11 @@ public class Plugin : BasePlugin
     private static ConfigEntry<bool> ResolutionOverride;
     private static ConfigEntry<bool> UIFix;
     
-    private static BepInEx.Logging.ManualLogSource logger; // Jank???
+    public static BepInEx.Logging.ManualLogSource logger; // Jank???
 
     public override void Load()
     {
-        logger = Log;
+        logger = base.Log;
         // Plugin startup logic
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
@@ -40,6 +40,8 @@ public class Plugin : BasePlugin
         UIFix = Config.Bind("Resolution", "UIFix", true);
 
         Harmony.PatchAll(typeof(Plugin));
+        Harmony.PatchAll(typeof(TopMenu));
+        Harmony.PatchAll(typeof(FlagViewerFix));
 
         // ok you can clown upon me...
         // foreach(var e in BustShots.consts) {
