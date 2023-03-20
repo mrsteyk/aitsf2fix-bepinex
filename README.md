@@ -2,7 +2,12 @@
 
 This is a WIP BepInEx6 BE version of [AI: THE SOMNIUM FILES - nirvanA Initiative Fix](https://github.com/Lyall/AISomniumFiles2Fix), with debug menu fixes maybe potentially.
 
-Only fix done is `BustShot` tree view.
+Fixes done:
+
+- `BustShot` fake folder stuff to populate treeview.
+- Hide `EventViewer`, because code for it is stripped completely and it overlays other windows.
+- Restore partial functionality of `FlagViewer` by jankiest means possible.
+- Most `TopMenu` buttons work.
 
 ## Configuration
 
