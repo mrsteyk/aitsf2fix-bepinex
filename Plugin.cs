@@ -42,18 +42,6 @@ public class Plugin : BasePlugin
         Harmony.PatchAll(typeof(Plugin));
         Harmony.PatchAll(typeof(TopMenu));
         Harmony.PatchAll(typeof(FlagViewerFix));
-
-        // ok you can clown upon me...
-        // foreach(var e in BustShots.consts) {
-        //     FolderManager.Folder folder;
-        //     if (FolderManager.data.folder.TryGetValue(e.Key, out folder)) {
-        //         folder.files.Add(e.Value);
-        //     } else {
-        //         folder = new FolderManager.Folder();
-        //         folder.files.Add(e.Value);
-        //         FolderManager.data.folder.Add(e.Key, folder);
-        //     }
-        // }
     }
 
     [HarmonyPatch(typeof(Game.CameraController), nameof(Game.CameraController.OnEnable))]

@@ -87,15 +87,8 @@ public class TopMenu {
         if(FlagViewerFix.dirty_flag) {
             if (FlagViewerFix.Instance) {
                 if (FlagViewerFix.Instance.enabled && FlagViewerFix.Instance.gameObject.active) {
-                    // Calls our hook lulw
-                    // Plugin.logger.LogInfo("Before Reload");
                     FlagViewerFix.dirty_flag = false;
                     FlagViewerFix.hkReload();
-                    // Plugin.logger.LogInfo("Before SetList if" + FlagViewerFix.rootContent + " " + FlagViewerFix.tree);
-                    // if (FlagViewerFix.rootContent != null && FlagViewerFix.tree != null)
-                    //     FlagViewerFix.tree.SetList(FlagViewerFix.rootContent);
-                    // else
-                    //     FlagViewerFix.dirty_flag = true;
                 }
             }
         }

@@ -11,8 +11,6 @@ public class FlagViewerFix { // MonoBehaviour, IFlagViewer, IBaseBehaviour {
     public static TreeView tree = null;
     public static Content rootContent = null;
     public static bool dirty_flag = false;
-    // public static int prev_count = 0;
-    public static bool cool = false;
 
     public static System.IntPtr klass_Content = Il2CppInterop.Runtime.IL2CPP.GetIl2CppClass("Assembly-CSharp.dll", "Develop", "Content");
 
@@ -38,43 +36,24 @@ public class FlagViewerFix { // MonoBehaviour, IFlagViewer, IBaseBehaviour {
     // [HarmonyPatch(typeof(Develop.FlagViewer), nameof(Develop.FlagViewer.ReloadFlag))]
     // [HarmonyPostfix]
     public static void hkReload() {
-        // tree = Instance.GetComponent<Develop.TreeView>();
-
         // Hide the shitter
         UnityEngine.GameObject.Find("_root/#Canvas/SafeArea/InGameMenu/RightPane/Windows/EventCall").SetActive(false);
 
         // I trully don't know if that's needed...
         rootContent = new Develop.Content(Il2CppInterop.Runtime.IL2CPP.il2cpp_object_new(klass_Content));
         // rootContent.level = -1;
-        // var content = new Il2CppSystem.Collections.Generic.List<Content>();
-
-        // {
-        //     var content = new Develop.Content(Il2CppInterop.Runtime.IL2CPP.il2cpp_object_new(klass_Content));
-        //     content.name = "Test";
-        //     // content.children = new();
-        //     // content.value = true;
-        //     content.exec += new System.Action<Content>((c) => {
-        //         Plugin.logger.LogInfo("Hello!" + c.ToString());
-        //     });
-        //     rootContent.AddChild(content);
-        // }
 
         if (Game.SFlagManager.Instance == null) {
             dirty_flag = true;
             return;
         }
 
-        // return;
-        // Plugin.logger.LogWarning("PRE FUNNY");
         var mem = Game.SFlagManager.Instance.GetMembers();
-        // Plugin.logger.LogWarning("FUNNY COUNT " + mem.count.ToString());
         if (mem.count == 0) {
             dirty_flag = true;
             return;
         }
         foreach(var e in mem) {
-            // Plugin.logger.LogInfo("Funny " + e.Key.ToString() + e.Value.ToString());
-            // Plugin.logger.LogInfo("Funny " + e.Value.ToString());
             if (e.Value.FieldType.ToString() == "System.Boolean") {
                 var checkbox = new Develop.Content(Il2CppInterop.Runtime.IL2CPP.il2cpp_object_new(klass_Content));
                 checkbox.name = e.Key;
@@ -86,11 +65,8 @@ public class FlagViewerFix { // MonoBehaviour, IFlagViewer, IBaseBehaviour {
                 Plugin.logger.LogError("Unknown type " + e.Value.FieldType.ToString());
             }
         }
-        cool = true;
 
-        Plugin.logger.LogWarning("POST FUNNY " + tree + " " + rootContent + " " + klass_Content + " " + rootContent.children._size);
         tree.SetList(rootContent);
-        // Plugin.logger.LogWarning("DONE! " + tree.items.Count);
     }
 
     // Sadly I can't override methods not overriden already...
