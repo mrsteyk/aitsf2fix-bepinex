@@ -80,7 +80,7 @@ public class FlagViewerFix { // MonoBehaviour, IFlagViewer, IBaseBehaviour {
                 checkbox.name = e.Key;
                 // checkbox.value = e.Value.GetValue();
                 checkbox.value = Game.SFlagManager.Instance.Get(e.Key);
-                checkbox.onValueChanged += new System.Action<Content, Il2CppSystem.Object>((c, o) => Game.SFlagManager.Instance.Set(c.name, o));
+                checkbox.onValueChanged += new System.Action<Content, Il2CppSystem.Object>((c, o) => {Game.SFlagManager.Instance.Set(c.name, o); c.value = o;});
                 rootContent.AddChild(checkbox);
             } else {
                 Plugin.logger.LogError("Unknown type " + e.Value.FieldType.ToString());
