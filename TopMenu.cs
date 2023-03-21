@@ -22,6 +22,9 @@ public class TopMenu {
     [HarmonyPatch(typeof(DevelopManager), nameof(DevelopManager.Awake))]
     [HarmonyPostfix]
     public static void Awake(DevelopManager __instance) {
+        // Hide the shitter
+        UnityEngine.GameObject.Find("_root/#Canvas/SafeArea/InGameMenu/RightPane/Windows/EventCall").SetActive(false);
+
         // In post all static stuff should be set...
         // Utter retardation idk how to cast in this language
         Instance = __instance;
@@ -66,6 +69,10 @@ public class TopMenu {
                 Game.SSaveDataManager.Instance.Load(i.ToString());
             });
         }
+        __instance.menuButton.onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
+            // TODO: blergh?
+            rooti.JumpTitle();
+        });
 
         // fpstext = UnityEngine.GameObject.Find("_root/#Canvas/SafeArea/TopButtons/FPS/Text").GetComponent<TextMeshProUGUI>();
         // Plugin.logger.LogInfo(fpstext);
