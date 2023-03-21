@@ -37,6 +37,9 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>libs\Unity.TextMeshPro-publicized.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>libs\UnityEngine.UIModule-publicized.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

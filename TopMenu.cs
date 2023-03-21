@@ -9,15 +9,15 @@ namespace aitsf2fix;
 public class TopMenu {
     public static bool aging_active = false;
     public static bool debug_active = false;
-    public static DevelopManager Instance = null;
-    public static Game.RootManager rooti = null;
+    // public static DevelopManager Instance = null;
+    // public static Game.RootManager rooti = null;
     // public static TextMeshProUGUI fpstext = null;
 
-    [HarmonyPatch(typeof(Game.RootManager), nameof(Game.RootManager.Awake))]
-    [HarmonyPostfix]
-    public static void RootAwake(Game.RootManager __instance) {
-        rooti = __instance;
-    }
+    // [HarmonyPatch(typeof(Game.RootManager), nameof(Game.RootManager.Awake))]
+    // [HarmonyPostfix]
+    // public static void RootAwake(Game.RootManager __instance) {
+    //     rooti = __instance;
+    // }
 
     [HarmonyPatch(typeof(DevelopManager), nameof(DevelopManager.Awake))]
     [HarmonyPostfix]
@@ -27,7 +27,7 @@ public class TopMenu {
 
         // In post all static stuff should be set...
         // Utter retardation idk how to cast in this language
-        Instance = __instance;
+        // Instance = __instance;
         __instance.topMenuButton.onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
             SDevelopManager.Instance.ShowMenu();
         });
@@ -35,8 +35,8 @@ public class TopMenu {
             debug_active = !debug_active;
             // I can't get normal to work so I am recreating it...
             DevelopSaveData.develop.display = debug_active;
-            // AAAAAAAAAAAAAAAAAA
-            Instance.inGameMenu.SetActive(debug_active);
+            // AAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaa
+            (new DevelopManager(SDevelopManager.Instance.Pointer)).inGameMenu.SetActive(debug_active);
         });
         __instance.motionButton.onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
             SDevelopManager.Instance.ToggleMotion();
@@ -52,14 +52,15 @@ public class TopMenu {
             // Maybe this?
             // This resets Static BGViewer or something like that
             // Game.RootManager.StaticReset();
-            rooti.Restart();
+            (new Game.RootManager(Game.SRootManager.Instance.Pointer)).Restart();
         });
         __instance.saveLoadButton.onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
             // ???
             // This is joystick input related
             // Instance.SaveLoadKey();
-            Game.SSaveDataManager.Instance.Save(Instance.saveloadMode.ToString());
-            Game.SSaveDataManager.Instance.Load(Instance.saveloadMode.ToString());
+            var i = new DevelopManager(SDevelopManager.Instance.Pointer);
+            Game.SSaveDataManager.Instance.Save(i.saveloadMode.ToString());
+            Game.SSaveDataManager.Instance.Load(i.saveloadMode.ToString());
         });
         for(var i = 0; i<5; i++) {
             __instance.saveButtons[i].onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
@@ -71,7 +72,17 @@ public class TopMenu {
         }
         __instance.menuButton.onPointerClick += new System.Action<UnityEngine.EventSystems.PointerEventData>((e) => {
             // TODO: blergh?
-            rooti.JumpTitle();
+            // (new Game.RootManager(Game.SRootManager.Instance.Pointer)).JumpTitle();
+            // This should be more correct?
+            var i = new DevelopManager(SDevelopManager.Instance.Pointer);
+            var c = i.developCanvasGroup;
+            if (c.alpha != 1) {
+                c.alpha = 1;
+                c.blocksRaycasts = true;
+            } else {
+                c.alpha = 0;
+                c.blocksRaycasts = false;
+            }
         });
 
         // fpstext = UnityEngine.GameObject.Find("_root/#Canvas/SafeArea/TopButtons/FPS/Text").GetComponent<TextMeshProUGUI>();

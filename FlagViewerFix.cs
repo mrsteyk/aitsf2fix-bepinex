@@ -12,7 +12,7 @@ public class FlagViewerFix { // MonoBehaviour, IFlagViewer, IBaseBehaviour {
     public static Content rootContent = null;
     public static bool dirty_flag = false;
 
-    public static System.IntPtr klass_Content = Il2CppInterop.Runtime.IL2CPP.GetIl2CppClass("Assembly-CSharp.dll", "Develop", "Content");
+    public static System.IntPtr klass_Content = Il2CppInterop.Runtime.Il2CppClassPointerStore<Develop.Content>.NativeClassPtr; //Il2CppInterop.Runtime.IL2CPP.GetIl2CppClass("Assembly-CSharp.dll", "Develop", "Content");
 
     [HarmonyPatch(typeof(Develop.FlagViewer), nameof(Develop.FlagViewer.Awake))]
     [HarmonyPostfix]
