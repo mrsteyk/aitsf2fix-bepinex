@@ -7,7 +7,7 @@ Fixes done:
 - `BustShot` fake folder stuff to populate treeview.
 - Hide `EventViewer`, because code for it is stripped completely and it overlays other windows.
 - Restore partial functionality of `FlagViewer` by jankiest means possible.
-- Most `TopMenu` buttons work.
+- All `TopMenu` buttons work. Functionality should be the same as intended (except for action binds which don't work???).
 
 ## Configuration
 
