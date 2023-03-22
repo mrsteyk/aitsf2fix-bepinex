@@ -11,6 +11,8 @@ Fixes done:
 
 ## Configuration
 
+Example config with defaults:
+
 ```ini
 ## Settings file was created by plugin aitsf2fix v1.0.0
 ## Plugin GUID: aitsf2fix
@@ -22,15 +24,25 @@ Fixes done:
 # Default value: true
 HighMSAA = true
 
+## Force NoVSync setting
+# Setting type: Boolean
+# Default value: false
+NoVSync = true
+
+## Force this anisoLevel
+# Setting type: Int32
+# Default value: -1
+ForceAniso = 16
+
 [Resolution]
 
 # Setting type: Int32
-# Default value: Main Display Width
-X = 1920
+# Default value: 1920
+X = 1366
 
 # Setting type: Int32
-# Default value: Main Display Height
-Y = 1080
+# Default value: 1080
+Y = 768
 
 # Setting type: Boolean
 # Default value: false
@@ -42,5 +54,5 @@ Fullscreen = false
 
 # Setting type: Boolean
 # Default value: true
-UIFix = true # doesn't do anything as of rn
+UIFix = true
 ```

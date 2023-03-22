@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>aitsf2fix</AssemblyName>
-    <Description>My first plugin</Description>
-    <Version>1.0.0</Version>
+    <Description>Various AITSF2 fixes...</Description>
+    <Version>2.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>

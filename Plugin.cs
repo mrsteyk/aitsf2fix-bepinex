@@ -17,6 +17,8 @@ public class Plugin : BasePlugin
     internal static Harmony Harmony { get; } = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
     private static ConfigEntry<bool> HighMSAA;
+    private static ConfigEntry<bool> NoVSync;
+    private static ConfigEntry<int> Aniso;
     private static ConfigEntry<int> DesiredResolutionX;
     private static ConfigEntry<int> DesiredResolutionY;
     private static ConfigEntry<bool> Fullscreen;
@@ -32,6 +34,8 @@ public class Plugin : BasePlugin
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
         HighMSAA = Config.Bind("Quality", "HighMSAA", true, "Enable High Quality MSAA on all cameras");
+        NoVSync = Config.Bind("Quality", "NoVSync", false, "Force NoVSync setting");
+        Aniso = Config.Bind("Quality", "ForceAniso", -1, "Force this anisoLevel");
         
         DesiredResolutionX = Config.Bind("Resolution", "X", Display.main.systemWidth);
         DesiredResolutionY = Config.Bind("Resolution", "Y", Display.main.systemHeight);
@@ -55,7 +59,15 @@ public class Plugin : BasePlugin
         }
     }
 
+    [HarmonyPatch(typeof(UnityEngine.Texture), "get_anisoLevel")]
+    [HarmonyPrefix]
+    public static void Texture2Dctor(UnityEngine.Texture __instance) {
+        if (Aniso.Value >= 0)
+            __instance.anisoLevel = Aniso.Value;
+    }
+
     [HarmonyPatch(typeof(Game.LauncherArgs), nameof(Game.LauncherArgs.OnRuntimeMethodLoad))]
+    [HarmonyPostfix]
     public static void SetResolution() {
         if (ResolutionOverride.Value) {
             logger.LogInfo("Overriding resolution");
@@ -67,6 +79,24 @@ public class Plugin : BasePlugin
                 logger.LogInfo("Override to windowed");
             }
         }
+        logger.LogInfo("Applying stuff!");
+        // Get's set to 8 :pensive:
+        // Get's set to 0 if I do it here :face_melt:
+        if (HighMSAA.Value)
+            UnityEngine.QualitySettings.antiAliasing = 16;
+        // UnityEngine.QualitySettings.anisotropicFiltering = UnityEngine.AnisotropicFiltering.ForceEnable;
+        // foreach(var name in UnityEngine.QualitySettings.names) {
+        //     logger.LogInfo(name);
+        // }
+        // There's only one quality level 0 - Fastest named "High"???
+        UnityEngine.QualitySettings.SetQualityLevel((int)UnityEngine.QualityLevel.Fantastic, true);
+        // Clamps to 9-16
+        UnityEngine.QualitySettings.anisotropicFiltering = UnityEngine.AnisotropicFiltering.ForceEnable;
+        UnityEngine.QualitySettings.shadowResolution = UnityEngine.ShadowResolution.VeryHigh;
+        UnityEngine.QualitySettings.skinWeights = UnityEngine.SkinWeights.Unlimited;
+        UnityEngine.QualitySettings.softParticles = true;
+        if (NoVSync.Value)
+            UnityEngine.QualitySettings.vSyncCount = 0;
     }
 
     // [HarmonyPatch(typeof(Develop.DevelopManager), "get_UserName")]
