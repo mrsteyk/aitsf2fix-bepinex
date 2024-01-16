@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
@@ -7,6 +8,7 @@ using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
+using UnityEngine.Experimental.Rendering.Universal.LibTessDotNet;
 
 namespace aitsf2fix;
 
@@ -24,7 +26,7 @@ public class Plugin : BasePlugin
     private static ConfigEntry<bool> Fullscreen;
     private static ConfigEntry<bool> ResolutionOverride;
     private static ConfigEntry<bool> UIFix;
-    
+
     public static BepInEx.Logging.ManualLogSource logger; // Jank???
 
     public override void Load()
@@ -36,7 +38,7 @@ public class Plugin : BasePlugin
         HighMSAA = Config.Bind("Quality", "HighMSAA", true, "Enable High Quality MSAA on all cameras");
         NoVSync = Config.Bind("Quality", "NoVSync", false, "Force NoVSync setting");
         Aniso = Config.Bind("Quality", "ForceAniso", -1, "Force this anisoLevel");
-        
+
         DesiredResolutionX = Config.Bind("Resolution", "X", Display.main.systemWidth);
         DesiredResolutionY = Config.Bind("Resolution", "Y", Display.main.systemHeight);
         ResolutionOverride = Config.Bind("Resolution", "Override", false);
@@ -46,6 +48,28 @@ public class Plugin : BasePlugin
         Harmony.PatchAll(typeof(Plugin));
         Harmony.PatchAll(typeof(TopMenu));
         Harmony.PatchAll(typeof(FlagViewerFix));
+        Harmony.CreateAndPatchAll(typeof(Plugin));
+    }
+    [HarmonyPatch(typeof(Game.InputActions), "Update")]
+    [HarmonyPostfix]
+    public static void InputActionsUpdatePostfix()
+    {
+
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            var topButtons = GameObject.Find("_root/#Canvas/SafeArea/TopButtons");
+            if (topButtons != null)
+            {
+
+                topButtons.SetActive(true);
+                logger.LogInfo("Successfully found and activated _root/#Canvas/SafeArea/TopButtons");
+            }
+            else
+            {
+                logger.LogWarning("Could not find _root/#Canvas/SafeArea/TopButtons");
+            }
+        }
+
     }
 
     [HarmonyPatch(typeof(Game.CameraController), nameof(Game.CameraController.OnEnable))]
